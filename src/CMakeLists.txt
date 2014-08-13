@@ -9,9 +9,14 @@ if(FFTWQ_LIB)
 endif()
 
 FILE(GLOB headers "${FFTWigner_SOURCE_DIR}/fftwpp/include/*.hpp")
-INSTALL(FILES ${headers} DESTINATION include)
+
+INSTALL(FILES ${headers}
+        DESTINATION include
+        COMPONENT fftwpp)
+
 INSTALL(TARGETS fftwpp
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib
+  COMPONENT fftwpp
 )
