@@ -15,12 +15,12 @@ namespace fftw
 
         static typename fftw_functions<real_type>::real_type* ptr(typename vector_types<real_type>::vector &vec)
         {
-            return reinterpret_cast<typename fftw_functions<real_type>::real_type*>(vec.data());
+            return reinterpret_cast<typename fftw_functions<real_type>::real_type*>(vec.data().data());
         }
 
         static typename fftw_functions<real_type>::complex* ptr(typename vector_types<real_type>::cvector &vec)
         {
-            return reinterpret_cast<typename fftw_functions<real_type>::complex*>(vec.data());
+            return reinterpret_cast<typename fftw_functions<real_type>::complex*>(vec.data().data());
         }
     };
 
