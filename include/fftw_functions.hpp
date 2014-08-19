@@ -4,17 +4,21 @@
 
 #include "fftw_config.hpp"
 
+#define COMMA ,
+
+#define APPLY_TO_FFTW_API(X,P)                        \
+X(P, plan_with_nthreads)                              \
+X(P, plan_many_dft_r2c)                               \
+X(P, plan_many_dft_c2r)                               \
+X(P, destroy_plan)                                    \
+X(P, execute_dft_r2c)                                 \
+X(P, execute_dft_c2r)                                 \
+X(P, malloc)                                          \
+X(P, free)
+
 #define DECL_FFTW_FUNCTION(type, name) static decltype(type##_##name)& name;
 
-#define DECL_FFTW_FUNCTIONS(type)                     \
-DECL_FFTW_FUNCTION(type, plan_with_nthreads)          \
-DECL_FFTW_FUNCTION(type, plan_many_dft_r2c)           \
-DECL_FFTW_FUNCTION(type, plan_many_dft_c2r)           \
-DECL_FFTW_FUNCTION(type, destroy_plan)                \
-DECL_FFTW_FUNCTION(type, execute_dft_r2c)             \
-DECL_FFTW_FUNCTION(type, execute_dft_c2r)             \
-DECL_FFTW_FUNCTION(type, malloc)                      \
-DECL_FFTW_FUNCTION(type, free)
+#define DECL_FFTW_FUNCTIONS(type) APPLY_TO_FFTW_API(DECL_FFTW_FUNCTION, type)
 
 #define DECL_FFTW_STRUCT_REAL(dtype, type, real)      \
 template<>                                            \
@@ -31,15 +35,7 @@ struct fftw_functions<dtype>                          \
 
 #define ASSIGN_FFTW_FUNCTION(dtype,type,name) decltype(type ## _ ## name)&  fftw_functions<dtype>::name = type ## _ ## name;
 
-#define ASSIGN_FFTW_FUNCTIONS(dtype, type)            \
-ASSIGN_FFTW_FUNCTION(dtype, type, plan_with_nthreads) \
-ASSIGN_FFTW_FUNCTION(dtype, type, plan_many_dft_r2c)  \
-ASSIGN_FFTW_FUNCTION(dtype, type, plan_many_dft_c2r)  \
-ASSIGN_FFTW_FUNCTION(dtype, type, destroy_plan)       \
-ASSIGN_FFTW_FUNCTION(dtype, type, execute_dft_r2c)    \
-ASSIGN_FFTW_FUNCTION(dtype, type, execute_dft_c2r)    \
-ASSIGN_FFTW_FUNCTION(dtype, type, malloc)             \
-ASSIGN_FFTW_FUNCTION(dtype, type, free)
+#define ASSIGN_FFTW_FUNCTIONS(dtype, type) APPLY_TO_FFTW_API(ASSIGN_FFTW_FUNCTION, dtype COMMA type)
 
 namespace fftw
 {
