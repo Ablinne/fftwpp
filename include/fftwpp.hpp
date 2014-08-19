@@ -12,6 +12,8 @@ namespace fftw
     struct fftwpp: fftw_functions<real_type> {
         typedef typename vector_types<real_type>::vector vector;
         typedef typename vector_types<real_type>::cvector cvector;
+        typedef typename vector_types<real_type>::uvector uvector;
+        typedef typename vector_types<real_type>::ucvector ucvector;
 
         static typename fftw_functions<real_type>::real_type* ptr(typename vector_types<real_type>::uvector &vec)
         {
