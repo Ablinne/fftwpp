@@ -1,14 +1,40 @@
 
-include_directories(${FFTWigner_SOURCE_DIR}/fftwpp/include)
+cmake_minimum_required(VERSION 2.8)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -Wall -Wextra -pedantic -m64 -pthread" )
+
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
+
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+include_directories(${FFTWPP_SOURCE_DIR}/include)
+
 add_library(fftwpp fftw_functions.cpp)
 
-target_link_libraries(fftwpp ${FFTW_THR_LIB} ${FFTW_LIB}  ${FFTWL_THR_LIB} ${FFTWL_LIB}  ${FFTWF_THR_LIB} ${FFTWF_LIB})
 
+# BOOST
+set(Boost_USE_STATIC_LIBS OFF)
+set(Boost_USE_MULTITHREADED ON)
+set(Boost_USE_STATIC_RUNTIME OFF)
+find_package(Boost 1.54.0 REQUIRED)
+include_directories(BEFORE SYSTEM ${Boost_INCLUDE_DIRS})
+
+
+# FFTW3
+find_path (FFTW_INCLUDES fftw3.h)
+include_directories(BEFORE SYSTEM ${FFTW_INCLUDES})
+
+find_library (FFTWQ_LIB NAMES fftw3q)
 if(FFTWQ_LIB)
-    target_link_libraries(fftwpp ${FFTWQ_THR_LIB} ${FFTWQ_LIB})
+    add_definitions(-DFFTWQ)
 endif()
 
-FILE(GLOB headers "${FFTWigner_SOURCE_DIR}/fftwpp/include/*.hpp")
+
+# INSTALL
+FILE(GLOB headers "${FFTWPP_SOURCE_DIR}/include/*.hpp")
 
 INSTALL(FILES ${headers}
         DESTINATION include
@@ -16,7 +42,15 @@ INSTALL(FILES ${headers}
 
 INSTALL(TARGETS fftwpp
   RUNTIME DESTINATION bin
+   COMPONENT fftwpp
   LIBRARY DESTINATION lib
+   COMPONENT fftwpp
   ARCHIVE DESTINATION lib
-  COMPONENT fftwpp
+   COMPONENT fftwpp
 )
+
+if(NOT TARGET uninstall)
+    add_custom_target(uninstall
+    "${CMAKE_COMMAND}" -P "${CMAKE_SOURCE_DIR}/uninstall.cmake"
+    )
+endif()
