@@ -98,10 +98,10 @@ namespace fftw
     template<typename T>
     struct vector_types
     {
-//         typedef std::vector< T, allocator<T> > vector;
-//         typedef std::vector< std::complex<T>, allocator< std::complex<T> > > cvector;
-        typedef ublas::vector< T, std::vector< T, allocator<T> > > vector;
-        typedef ublas::vector< std::complex<T>, std::vector< std::complex<T>, allocator< std::complex<T> > > > cvector;
+        typedef std::vector< T, allocator<T> > vector;
+        typedef std::vector< std::complex<T>, allocator< std::complex<T> > > cvector;
+        typedef ublas::vector< T, std::vector< T, allocator<T> > > uvector;
+        typedef ublas::vector< std::complex<T>, std::vector< std::complex<T>, allocator< std::complex<T> > > > ucvector;
     };
 
 }
