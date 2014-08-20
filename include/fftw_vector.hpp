@@ -44,21 +44,12 @@ namespace fftw
 
         pointer allocate(size_type n, const void* = 0)
         {
-#ifdef BZ_DEBUG
-            Tp* tmp;
-            tmp = static_cast<Tp*>(FFTW::malloc(n * sizeof(Tp)));
-            std::cerr << "fftw_malloc(sizeof(Tp)*" << n << ") @ " << tmp << std::endl;
-            return tmp;
-#else
             return static_cast<Tp*>(FFTW::malloc(n * sizeof(Tp)));
-#endif
         }
 
         void deallocate(pointer p, size_type)
         {
-#ifdef BZ_DEBUG
             std::cerr << "fftw_free(" << p << ")" << std::endl;
-#endif
             FFTW::free(p);
         }
 
