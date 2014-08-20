@@ -49,7 +49,6 @@ namespace fftw
 
         void deallocate(pointer p, size_type)
         {
-            std::cerr << "fftw_free(" << p << ")" << std::endl;
             FFTW::free(p);
         }
 
