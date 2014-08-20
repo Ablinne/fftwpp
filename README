@@ -1,0 +1,78 @@
+
+    FFTWPP 1.0
+
+
+1. What is this?
+
+
+  This library makes it easier to use FFTW (http://www.fftw.org) in C++ if you
+  plan to switch between data types. FFTW uses different function and type names
+  for different numeric data types. FFTWPP combines all these functions and types
+  into a templated struct, that just takes your desired data type and gives you
+  all the types and functions:
+
+  e.g.:
+
+  typedef fftw::fftwpp<long double> FFTW;
+  typedef typename FFTW::plan fftwpp_plan;
+  typedef typename FFTW::complex fftwpp_complex;
+
+  # this is fftwl_plan_dft_1d
+  fftwpp_plan FFTW::plan_dft_1d(...);
+
+  Additionaly this library contains a few new datatypes:
+
+  typedef typename FFTW::vector fftwvector;
+  typedef typename FFTW::cvector fftwcvector;
+
+  These are std::vectors for real and complex numbers respectively which
+  internally use fftw[l,f,q,]_malloc() to allocate memory. FFTWs functions 
+  require pointers and the FFTW struct contains a static method to convert them
+  to pointers:
+
+  fftwvector my_data(512*512*10);
+  auto my_ptr = FFTW::ptr(my_data);
+
+  As a special bonus there are also datatypes which are based on
+  boost::ublas::vector which in turn are then based upon the above vectors
+  and work in the same way:
+
+  typedef typename FFTW::uvector uvector;
+  typedef typename FFTW::ucvector ucvector;
+
+
+2. Compilation and Installation:
+
+  Compile:
+
+    cd build
+    cmake ..
+    make
+
+
+  Compile for debugging:
+
+    cd build
+    cmake -DCMAKE_BUILD_TYPE=Debug ..
+    make
+
+
+  Install locally:
+
+    cd build
+    cmake -DCMAKE_INSTALL_PREFIX=$HOME/local ..
+    make install
+
+
+  Deinstall:
+
+    make uninstall
+
+
+3. License:
+
+  This library is released under the GPL v3, see COPYING
+
+4. Contact:
+
+  FFTWPP war written by Alexander Blinne <alexander.blinne@uni-jena.de>
