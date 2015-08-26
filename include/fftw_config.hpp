@@ -9,6 +9,10 @@
 #include <complex>
 #include <fftw3.h>
 
+#if defined(_OPENMP)
+    #include <omp.h>
+#endif //_OPENMP
+
 #ifdef FFTWQ
 # if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)) \
   && !(defined(__ICC) || defined(__INTEL_COMPILER)) \
@@ -20,11 +24,11 @@
 #endif
 
 #ifdef FFTWQ_REAL
-#include <boost/multiprecision/float128.hpp>
+    #include <boost/multiprecision/float128.hpp>
 
-static_assert(std::is_standard_layout<boost::multiprecision::float128>::value,"no standard type");
-static_assert(sizeof(boost::multiprecision::float128) == sizeof(__float128),"size mismatch");
-#endif
+    static_assert(std::is_standard_layout<boost::multiprecision::float128>::value,"no standard type");
+    static_assert(sizeof(boost::multiprecision::float128) == sizeof(__float128),"size mismatch");
+#endif // FFTWQ_REAL
 
 
 #endif //FFTW_CONFIG_HPP
